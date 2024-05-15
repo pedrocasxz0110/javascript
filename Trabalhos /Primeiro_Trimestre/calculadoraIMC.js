@@ -31,26 +31,25 @@ function sugerirPeso(peso, altura, metaIMC) {
     }
 }
 
-function main() {
-    let peso, altura;
-    try {
-        peso = parseFloat(prompt("Digite o peso (em kg):"));
-        altura = parseFloat(prompt("Digite a altura (em metros):"));
-        if (isNaN(peso) || isNaN(altura) || peso <= 0 || altura <= 0) {
-            throw new Error("Peso e altura devem ser números válidos e positivos.");
-        }
-    } catch (error) {
-        console.log(error.message);
+document.getElementById('imcForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    
+    const peso = parseFloat(document.getElementById('peso').value);
+    const altura = parseFloat(document.getElementById('altura').value);
+
+    if (isNaN(peso) || isNaN(altura) || peso <= 0 || altura <= 0) {
+        alert("Peso e altura devem ser números válidos e positivos.");
         return;
     }
 
     const imc = calcularIMC(peso, altura);
-    console.log("Seu IMC é:", imc.toFixed(2));
-    console.log("Você está classificado como:", interpretarIMC(imc));
+    const interpretacao = interpretarIMC(imc);
+    let resultado = `Seu IMC é: ${imc.toFixed(2)}<br>Você está classificado como: ${interpretacao}`;
+    
     if (imc < 18.5 || imc >= 25) {
         const metaIMC = 24.9; // IMC desejado para estar dentro da faixa de peso normal
-        console.log(sugerirPeso(peso, altura, metaIMC));
+        resultado += `<br>${sugerirPeso(peso, altura, metaIMC)}`;
     }
-}
 
-main();
+    document.getElementById('resultado').innerHTML = resultado;
+});
